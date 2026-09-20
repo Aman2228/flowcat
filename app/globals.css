@@ -1161,3 +1161,33 @@ textarea {
     animation: none !important;
   }
 }
+
+/* -- Sync status ------------------------------------------------------ */
+
+.syncBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -6px 0 10px;
+  color: var(--ink-2);
+  font-size: 13px;
+}
+
+.syncDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink-2);
+}
+
+.syncDot.synced {
+  background: var(--ok);
+}
+
+.syncDot.syncing {
+  background: var(--warn);
+}
+
+.syncDot.offline {
+  background: var(--danger);
+}

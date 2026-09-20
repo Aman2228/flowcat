@@ -3,8 +3,9 @@
 A flexible day-by-day study planner built for Sana, preparing for CAT 2026
 (29 November). Nothing is hard-coded: every section, target, weekly routine,
 session length, break, and individual block is editable from inside the app.
-There's no login and no backend — everything is saved in the browser's
-`localStorage`, with a one-click JSON backup/restore in Settings.
+Data is cached in the browser's `localStorage` and, once Supabase is set up
+(see below), synced so every device shows the same plan.
+There's also a one-click JSON backup/restore in Settings.
 
 ## What it does
 
@@ -48,9 +49,28 @@ runtime — it's only what a fresh browser starts with, and what "Reset
 everything" returns to) and `lib/planner.js` for the pure functions that
 build a day's blocks from the weekly pattern, routine, tasks and goals, plus
 the progress/statistics helpers. `lib/useFlowStore.js` is the only place that
-touches `localStorage`.
+touches `localStorage` or Supabase.
+
+## Sync across devices (Supabase, no login)
+
+1. Create a Supabase project, then run `supabase.sql` in its SQL Editor.
+2. Copy `Project URL` and the anon / publishable key (Project Settings -> API)
+   into `.env.local`:
+
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR-ANON-OR-PUBLISHABLE-KEY
+   ```
+
+3. `npm run dev`. The first device to open the app uploads what it has; every
+   other device then loads that same plan automatically.
+
+There is no sign-in: whoever opens the app sees and edits the one shared plan,
+so don't share the link publicly. The database only lets the public key touch
+that single row. Without the two variables the app runs browser-only, as
+before. Never put the `service_role` / secret key in a `NEXT_PUBLIC_` variable.
 
 ## Deploy
 
-Any static/Node host that runs Next.js works (e.g. Vercel). No environment
-variables are required — there's no external service to configure.
+Any static/Node host that runs Next.js works (e.g. Vercel). Add the two
+`NEXT_PUBLIC_SUPABASE_*` variables in the host's settings and redeploy.

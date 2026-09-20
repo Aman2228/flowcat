@@ -19,8 +19,15 @@ const TABS = [
 
 const UNDO_LIMIT = 20;
 
+const SYNC_LABEL = {
+  idle: "Connecting…",
+  syncing: "Saving…",
+  synced: "Synced across devices",
+  offline: "Offline. Changes are kept here and will sync when you are back online.",
+};
+
 export default function HomePage() {
-  const { state, update, replace, reset, saveError } = useFlowStore();
+  const { state, update, replace, reset, saveError, sync } = useFlowStore();
   const [tab, setTab] = useState("day");
   const [date, setDate] = useState("");
   const [now, setNow] = useState(null);
@@ -212,6 +219,13 @@ export default function HomePage() {
           </span>
         </div>
       </header>
+
+      {sync.enabled && (
+        <div className="syncBar">
+          <span className={`syncDot ${sync.status}`} />
+          <span>{SYNC_LABEL[sync.status]}</span>
+        </div>
+      )}
 
       {saveError && <p className="warnBanner">This browser's storage is full, so your latest change may not be saved. Try clearing old backups.</p>}
 
