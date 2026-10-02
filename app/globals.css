@@ -1191,3 +1191,167 @@ textarea {
 .syncDot.offline {
   background: var(--danger);
 }
+
+/* -- Life log ----------------------------------------------------------- */
+
+.timeline {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.timelineRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr) auto;
+  gap: 4px 14px;
+  align-items: start;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--ink-2);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.timelineRow > .editor {
+  grid-column: 1 / -1;
+}
+
+.timelineRow.block {
+  border-left-color: var(--cat, var(--ink-2));
+  background: var(--surface-2);
+}
+
+.timelineRow.block.session {
+  background: var(--surface);
+}
+
+.timelineRow.log {
+  border-left-color: var(--focus);
+}
+
+.timelineRow.gap {
+  border-style: dashed;
+  color: var(--ink-2);
+  background: transparent;
+}
+
+.timelineTime strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.25;
+}
+
+.timelineTime span {
+  display: block;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.timelineBody {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.timelineTitle {
+  font-weight: 650;
+  font-size: 15px;
+}
+
+.timelineMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.timelineNote {
+  margin: 2px 0 0;
+  font-size: 13.5px;
+  color: var(--ink-2);
+}
+
+.planTag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-2);
+}
+
+.tagChip {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 650;
+  padding: 1px 9px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--focus) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--focus) 45%, transparent);
+}
+
+@media (max-width: 720px) {
+  .timelineRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .timelineTime {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+}
+
+/* -- Sync status ------------------------------------------------------ */
+
+.syncBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -6px 0 10px;
+  color: var(--ink-2);
+  font-size: 13px;
+}
+
+.syncDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink-2);
+}
+
+.syncDot.synced {
+  background: var(--ok);
+}
+
+.syncDot.syncing {
+  background: var(--warn);
+}
+
+.syncDot.offline {
+  background: var(--danger);
+}
+
+/* -- Sync diagnostics ----------------------------------------------------- */
+
+.syncErr {
+  margin: 8px 0;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in srgb, var(--danger) 50%, transparent);
+  border-left: 4px solid var(--danger);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--danger) 8%, transparent);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.syncErr p {
+  margin: 6px 0 0;
+  color: var(--ink-2);
+}

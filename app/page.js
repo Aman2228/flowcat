@@ -6,6 +6,7 @@ import { generateDayBlocks, getBlocksForDate, regenerateKeepingLogged, shiftBloc
 import { addDays, daysUntil, fromMin, longDate, nowMin, shortDate, todayStr, toMin, uid, weekDates } from "../lib/time";
 import DayView from "../components/DayView";
 import Progress from "../components/Progress";
+import LifeLog from "../components/LifeLog";
 import Mocks from "../components/Mocks";
 import Settings from "../components/Settings";
 import { TimerConsole, TimerPanel, useTimer } from "../components/Timer";
@@ -13,6 +14,7 @@ import { TimerConsole, TimerPanel, useTimer } from "../components/Timer";
 const TABS = [
   { id: "day", label: "Plan" },
   { id: "progress", label: "Progress" },
+  { id: "log", label: "Life log" },
   { id: "mocks", label: "Mocks" },
   { id: "settings", label: "Settings" },
 ];
@@ -20,10 +22,11 @@ const TABS = [
 const UNDO_LIMIT = 20;
 
 const SYNC_LABEL = {
+  local: "Not syncing: no Supabase keys in this build. Data stays on this device only.",
   idle: "Connecting…",
   syncing: "Saving…",
   synced: "Synced across devices",
-  offline: "Offline. Changes are kept here and will sync when you are back online.",
+  offline: "Offline. Changes are kept here and retried automatically.",
 };
 
 export default function HomePage() {
@@ -220,12 +223,15 @@ export default function HomePage() {
         </div>
       </header>
 
-      {sync.enabled && (
-        <div className="syncBar">
-          <span className={`syncDot ${sync.status}`} />
-          <span>{SYNC_LABEL[sync.status]}</span>
-        </div>
-      )}
+      <div className="syncBar">
+        <span className={`syncDot ${sync.enabled ? sync.status : "offline"}`} />
+        <span>{SYNC_LABEL[sync.enabled ? sync.status : "local"]}</span>
+        {(sync.status === "offline" || !sync.enabled) && (
+          <button className="linkBtn" onClick={() => setTab("settings")}>
+            Why? / Fix
+          </button>
+        )}
+      </div>
 
       {saveError && <p className="warnBanner">This browser's storage is full, so your latest change may not be saved. Try clearing old backups.</p>}
 
@@ -306,9 +312,13 @@ export default function HomePage() {
         />
       )}
 
+      {tab === "log" && (
+        <LifeLog state={state} date={date} onDateChange={setDate} onGoToPlan={() => setTab("day")} update={update} />
+      )}
+
       {tab === "mocks" && <Mocks mocks={state.mocks} update={update} />}
 
-      {tab === "settings" && <Settings state={state} update={update} onReplace={replace} onReset={reset} />}
+      {tab === "settings" && <Settings state={state} update={update} onReplace={replace} onReset={reset} sync={sync} />}
     </main>
   );
 }
