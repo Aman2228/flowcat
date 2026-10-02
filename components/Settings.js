@@ -4,10 +4,11 @@ import { useRef, useState } from "react";
 import { EVENT_KINDS } from "../lib/data";
 import { WEEK_ORDER, DAY_FULL, uid, fmtHours, toMin, dateToStr } from "../lib/time";
 import { CategorySelect, Field, NumInput, catInfo } from "./ui";
+import SyncPanel from "./SyncPanel";
 
 const PALETTE = ["#8E4EC6", "#0E9AA7", "#E8743B", "#D6336C", "#5C6F82", "#4C9F5A", "#C9A227", "#3B5BDB", "#B8483B"];
 
-export default function Settings({ state, update, onReplace, onReset }) {
+export default function Settings({ state, update, onReplace, onReset, sync }) {
   const { settings, categories, events, patterns } = state;
   const fileRef = useRef(null);
   const [copyFrom, setCopyFrom] = useState("Mon");
@@ -340,10 +341,12 @@ export default function Settings({ state, update, onReplace, onReset }) {
         })}
       </section>
 
+      {sync && <SyncPanel sync={sync} />}
+
       <section className="panel">
         <h2>Backup</h2>
         <p className="muted">
-          Everything is saved in this browser only. Download a backup now and then, or to move to another phone or laptop.
+          Your plan is saved in this browser (and synced when Sync above is on). Download a backup now and then as a safety net.
         </p>
         <div className="btnRow">
           <button className="btn primary" onClick={exportData}>
